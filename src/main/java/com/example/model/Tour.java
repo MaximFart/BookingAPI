@@ -6,12 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table()
+@Table(name = "tours")
 public class Tour {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long price;
     private String route;
     private LocalDate start;
-    private LocalDate end;
+    private LocalDate finish;
 
     @OneToMany(mappedBy = "tour")
     private List<Booking> bookings = new ArrayList<>();
@@ -25,6 +29,14 @@ public class Tour {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
     public String getRoute() {
@@ -43,11 +55,11 @@ public class Tour {
         this.start = start;
     }
 
-    public LocalDate getEnd() {
-        return end;
+    public LocalDate getFinish() {
+        return finish;
     }
 
-    public void setEnd(LocalDate end) {
-        this.end = end;
+    public void setFinish(LocalDate finish) {
+        this.finish = finish;
     }
 }

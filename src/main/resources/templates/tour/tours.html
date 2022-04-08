@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Tours</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<table class="table table-bordered table-sm">
+    <thead class="table-active">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">price</th>
+        <th scope="col">route</th>
+        <th scope="col">start</th>
+        <th scope="col">finish</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="tour: ${tours}">
+        <td th:text="${tour.getId()}">VALUE</td>
+        <td th:text="${tour.getPrice()}">VALUE</td>
+        <td th:text="${tour.getRoute()}">VALUE</td>
+        <td th:text="${tour.getStart()}">VALUE</td>
+        <td th:text="${tour.getFinish()}">VALUE</td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{tours/new}">Add new tour</a>
+</body>
+</html>

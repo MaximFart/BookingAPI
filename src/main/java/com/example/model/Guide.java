@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table()
+@Table(name = "guides")
 public class Guide extends Person {
 
     private String position;

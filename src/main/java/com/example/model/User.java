@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "users")
 public class User extends Person {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
 
     public User() {
