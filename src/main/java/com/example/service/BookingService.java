@@ -20,8 +20,8 @@ public class BookingService {
     }
 
     @Transactional
-    public void save(Booking booking) {
-        bookingRepository.save(booking);
+    public Booking save(Booking booking) {
+        return bookingRepository.save(booking);
     }
 
     @Transactional
@@ -30,12 +30,7 @@ public class BookingService {
     }
 
     @Transactional
-    public void update(Booking booking) {
-        bookingRepository.save(booking);
-    }
-
-    @Transactional
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         bookingRepository.deleteById(id);
     }
 

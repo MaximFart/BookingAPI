@@ -1,20 +1,17 @@
-package com.example.model;
+package com.example.model.dto;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 
-@MappedSuperclass
-public abstract class Person {
+public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private String login;
     private String password;
     private String firstName;
     private String lastName;
+    private String role;
 
-    public Person() {
+    public UserDto() {
     }
 
     public Long getId() {
@@ -56,4 +53,13 @@ public abstract class Person {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
+

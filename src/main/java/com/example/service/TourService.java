@@ -20,8 +20,8 @@ public class TourService {
     }
 
     @Transactional
-    public void save(Tour tour) {
-        tourRepository.save(tour);
+    public Tour save(Tour tour) {
+        return tourRepository.save(tour);
     }
 
     @Transactional
@@ -30,12 +30,7 @@ public class TourService {
     }
 
     @Transactional
-    public void update(Tour tour) {
-        tourRepository.save(tour);
-    }
-
-    @Transactional
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         tourRepository.deleteById(id);
      }
 

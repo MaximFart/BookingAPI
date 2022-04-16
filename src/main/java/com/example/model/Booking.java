@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.example.model.dto.BookingDto;
+
 import javax.persistence.*;
 
 
@@ -24,6 +26,15 @@ public class Booking {
     private Guide guide;
 
     public Booking() {
+    }
+
+    public BookingDto convertToDto() {
+        BookingDto bookingDto = new BookingDto();
+        bookingDto.setId(id);
+        bookingDto.setTourDto(tour.convertToDto());
+        bookingDto.setUserDto(user.convertToDto());
+        bookingDto.setGuideDto(guide.convertToDto());
+        return bookingDto;
     }
 
     public Long getId() {

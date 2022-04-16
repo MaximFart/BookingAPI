@@ -1,16 +1,17 @@
 package com.example.controller;
 
+import com.example.controller.exception.NoEntityException;
 import com.example.model.Tour;
+import com.example.model.dto.TourDto;
 import com.example.service.TourService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
 @RequestMapping("/tours")
 public class TourController {
 
@@ -21,20 +22,36 @@ public class TourController {
         this.tourService = tourService;
     }
 
-    @GetMapping()
-    public String findAll(Model model) {
-        model.addAttribute("tours", tourService.findAll());
-        return "tour/tours";
+    @GetMapping
+    public List<TourDto> findAllTours() {
+        return tourService.findAll().stream().map(Tour::convertToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/new")
-    public String create(@ModelAttribute("tour") Tour tour) {
-        return "/tour/new";
+    @GetMapping("/{id}")
+    public TourDto getTour(@PathVariable("id") Long id) throws NoEntityException {
+        return tourService.getById(id).map(Tour::convertToDto).orElseThrow(NoEntityException::new);
     }
 
-    @PostMapping()
-    public String saveTour(@ModelAttribute("tour") Tour tour) {
-        tourService.save(tour);
-        return "redirect:/tours";
+    @PostMapping
+    public TourDto newTour(@RequestBody Tour tour) {
+        return tourService.save(tour).convertToDto();
+    }
+
+    @PutMapping("/{id}")
+    public TourDto editTour(@PathVariable("id") Long id, @RequestBody Tour newTour) throws NotFoundException {
+        return tourService.getById(id)
+                .map(tour -> {
+                    tour.setPrice(newTour.getPrice());
+                    tour.setRoute(newTour.getRoute());
+                    tour.setStart(newTour.getStart());
+                    tour.setFinish(newTour.getFinish());
+                    return tourService.save(tour).convertToDto();
+                })
+                .orElseThrow(() -> new NotFoundException("This tour not exist"));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTour(@PathVariable("id") Long id) {
+        tourService.deleteById(id);
     }
 }

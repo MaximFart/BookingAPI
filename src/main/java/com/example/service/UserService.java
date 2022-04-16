@@ -20,8 +20,8 @@ public class UserService {
     }
 
     @Transactional
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -30,12 +30,7 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user) {
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 

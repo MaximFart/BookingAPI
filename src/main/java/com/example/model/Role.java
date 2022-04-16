@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.example.model.dto.RoleDto;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String role;
+    private String name;
 
     @OneToMany(mappedBy = "role")
     private List<Guide> guides = new ArrayList<>();
@@ -22,6 +24,13 @@ public class Role {
     public Role() {
     }
 
+    public RoleDto convertToDto() {
+        RoleDto roleDto = new RoleDto();
+        roleDto.setId(id);
+        roleDto.setName(name);
+        return roleDto;
+    }
+
     public Long getId() {
         return id;
     }
@@ -30,11 +39,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 }

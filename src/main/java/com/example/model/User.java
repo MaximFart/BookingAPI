@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.example.model.dto.UserDto;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,17 @@ public class User extends Person {
     private List<Booking> bookings = new ArrayList<>();
 
     public User() {
+    }
+
+    public UserDto convertToDto() {
+        UserDto userDto = new UserDto();
+        userDto.setId(getId());
+        userDto.setLogin(getLogin());
+        userDto.setPassword(getPassword());
+        userDto.setFirstName(getFirstName());
+        userDto.setLastName(getLastName());
+        userDto.setRole(role.getName());
+        return userDto;
     }
 
     public Role getRole() {

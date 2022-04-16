@@ -1,38 +1,16 @@
-package com.example.model;
+package com.example.model.dto;
 
-import com.example.model.dto.TourDto;
-
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
-@Table(name = "tours")
-public class Tour {
+public class TourDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long price;
     private String route;
     private LocalDate start;
     private LocalDate finish;
 
-    @OneToMany(mappedBy = "tour")
-    private List<Booking> bookings = new ArrayList<>();
-
-    public Tour() {
-    }
-
-    public TourDto convertToDto() {
-        TourDto tourDto = new TourDto();
-        tourDto.setId(id);
-        tourDto.setPrice(price);
-        tourDto.setRoute(route);
-        tourDto.setStart(start);
-        tourDto.setFinish(finish);
-        return tourDto;
+    public TourDto() {
     }
 
     public Long getId() {

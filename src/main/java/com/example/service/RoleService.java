@@ -20,8 +20,8 @@ public class RoleService {
     }
 
     @Transactional
-    public void save(Role role) {
-        roleRepository.save(role);
+    public Role save(Role role) {
+        return roleRepository.save(role);
     }
 
     @Transactional
@@ -30,12 +30,7 @@ public class RoleService {
     }
 
     @Transactional
-    public void update(Role role) {
-        roleRepository.save(role);
-    }
-
-    @Transactional
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         roleRepository.deleteById(id);
     }
 

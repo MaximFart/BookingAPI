@@ -20,8 +20,8 @@ public class GuideService {
     }
 
     @Transactional
-    public void save(Guide guide) {
-        guideRepository.save(guide);
+    public Guide save(Guide guide) {
+        return guideRepository.save(guide);
     }
 
     @Transactional
@@ -30,12 +30,7 @@ public class GuideService {
     }
 
     @Transactional
-    public void update(Guide guide) {
-        guideRepository.save(guide);
-    }
-
-    @Transactional
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         guideRepository.deleteById(id);
     }
 
