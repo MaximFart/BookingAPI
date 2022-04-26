@@ -1,6 +1,6 @@
 package com.example.model;
 
-import com.example.model.dto.TourDto;
+import com.example.dto.TourDto;
 
 import javax.persistence.*;
 import java.time.LocalDate;

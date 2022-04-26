@@ -1,6 +1,6 @@
 package com.example.model;
 
-import com.example.model.dto.RoleDto;
+import com.example.dto.RoleDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,9 +14,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    @OneToMany(mappedBy = "role")
-    private List<Guide> guides = new ArrayList<>();
 
     @OneToMany(mappedBy = "role")
     private List<User> users = new ArrayList<>();

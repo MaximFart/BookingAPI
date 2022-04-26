@@ -7,7 +7,7 @@ create table roles (
 
 create table users (
   	id serial not null primary key,
-    login varchar(255) not null,
+    username varchar(255) not null,
     password varchar(255) not null,
     first_name varchar(255) not null,
     last_name varchar(255) not null,
@@ -15,21 +15,13 @@ create table users (
     foreign key (role_id) references roles(id) on delete cascade
 );
 
-alter table users add constraint unique_login unique (login);
+alter table users add constraint unique_username unique (username);
 
 create table guides (
   	id serial not null primary key,
-    login varchar(255) not null,
-    password varchar(255) not null,
     first_name varchar(255) not null,
     last_name varchar(255) not null,
-    position varchar(255) not null,
-    role_id integer not null,
-    unique (login),
-  	foreign key (role_id) references roles(id) on delete cascade
 );
-
-alter table guides add constraint unique_login unique (login);
 
 create table tours (
     id serial not null primary key,

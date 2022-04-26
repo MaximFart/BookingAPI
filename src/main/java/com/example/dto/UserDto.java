@@ -1,11 +1,9 @@
-package com.example.model.dto;
-
-import javax.persistence.Column;
+package com.example.dto;
 
 public class UserDto {
 
     private Long id;
-    private String login;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
@@ -22,12 +20,12 @@ public class UserDto {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

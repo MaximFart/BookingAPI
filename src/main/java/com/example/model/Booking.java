@@ -1,6 +1,6 @@
 package com.example.model;
 
-import com.example.model.dto.BookingDto;
+import com.example.dto.BookingDto;
 
 import javax.persistence.*;
 
