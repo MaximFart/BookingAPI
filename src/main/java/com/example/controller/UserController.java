@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.security.SecurityConstants.AUTH_ADMIN;
+import static com.example.security.SecurityConstants.AUTH_ALL;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -23,25 +26,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @GetMapping
     public List<UserDto> findAllUsers() {
         return userService.findAll().stream().map(User::convertToDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @GetMapping("/{id}")
     public UserDto getUser(@PathVariable("id") Long id) throws NotFoundException {
         return userService.getById(id).map(User::convertToDto).orElseThrow(() -> new NotFoundException("This tour not exist"));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @PostMapping
     public UserDto newUser(@RequestBody User newUser) {
         return userService.save(newUser).convertToDto();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @PutMapping("/{id}")
     public UserDto editUser(@PathVariable("id") Long id, @RequestBody User newUser) throws NoEntityException {
         return userService.getById(id)
@@ -56,7 +59,7 @@ public class UserController {
                 .orElseThrow(() -> new NoEntityException("This user not exist"));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.security.SecurityConstants.AUTH_ADMIN;
+import static com.example.security.SecurityConstants.AUTH_ALL;
+
 @RestController
 @RequestMapping("/api/v1/guides")
 public class GuideController {
@@ -23,25 +26,25 @@ public class GuideController {
         this.guideService = guideService;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @GetMapping
     public List<GuideDto> findAllRoles() {
         return guideService.findAll().stream().map(Guide::convertToDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @GetMapping("/{id}")
     public GuideDto getGuide(@PathVariable("id") Long id) throws NotFoundException {
         return guideService.getById(id).map(Guide::convertToDto).orElseThrow(() -> new NotFoundException("This guide not exist"));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @PostMapping
     public GuideDto newGuide(@RequestBody Guide newGuide) {
         return guideService.save(newGuide).convertToDto();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @PutMapping("/{id}")
     public GuideDto editGuide(@PathVariable("id") Long id, @RequestBody Guide newGuide) throws NoEntityException {
         return guideService.getById(id)
@@ -53,7 +56,7 @@ public class GuideController {
                 .orElseThrow(() -> new NoEntityException("This guide not exist"));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @DeleteMapping("/{id}")
     public void deleteGuide(@PathVariable("id") Long id) {
         guideService.deleteById(id);

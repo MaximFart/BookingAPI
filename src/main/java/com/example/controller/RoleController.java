@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.security.SecurityConstants.AUTH_ADMIN;
+import static com.example.security.SecurityConstants.AUTH_ALL;
+
 @RestController
 @RequestMapping("/api/v1/roles")
 public class RoleController {
@@ -23,25 +26,25 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @GetMapping
     public List<RoleDto> findAllRoles() {
         return roleService.findAll().stream().map(Role::convertToDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ALL)
     @GetMapping("/{id}")
     public RoleDto getRole(@PathVariable("id") Long id) throws NotFoundException {
         return roleService.getById(id).map(Role::convertToDto).orElseThrow(() -> new NotFoundException("This role not exist"));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @PostMapping
     public RoleDto newRole(@RequestBody Role newRole) {
         return roleService.save(newRole).convertToDto();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @PutMapping("/{id}")
     public RoleDto editRole(@PathVariable("id") Long id, @RequestBody Role newRole) throws NoEntityException {
         return roleService.getById(id)
@@ -52,7 +55,7 @@ public class RoleController {
                 .orElseThrow(() -> new NoEntityException("This role not exist"));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(AUTH_ADMIN)
     @DeleteMapping("/{id}")
     public void deleteRole(@PathVariable("id") Long id) {
         roleService.deleteById(id);

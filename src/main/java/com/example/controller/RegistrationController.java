@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.example.security.SecurityConstants.USER;
+
 @RestController
-@RequestMapping("/api/v1/reg")
+@RequestMapping("/api/v1/regist")
 public class RegistrationController {
 
     private final UserService userService;
@@ -32,7 +34,7 @@ public class RegistrationController {
                 dto.getLastName(),
                 dto.getUsername(),
                 dto.getPassword(),
-                roleService.findByName("ROLE_USER").orElseThrow(() -> new EntityNotFoundException("Role is not found", HttpStatus.NO_CONTENT))
+                roleService.findByName(USER).orElseThrow(() -> new EntityNotFoundException("Role is not found", HttpStatus.NO_CONTENT))
         );
         return new ResponseEntity<>(userService.save(user).convertToDto(), HttpStatus.OK);
     }

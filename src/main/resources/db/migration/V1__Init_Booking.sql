@@ -1,4 +1,9 @@
-drop table if exists booking, guides, tours, users, roles;
+drop table if exists roles cascade;
+drop table if exists users cascade;
+drop table if exists tours cascade;
+drop table if exists guides cascade;
+drop table if exists bookings cascade;
+drop table if exists booking_user cascade;
 
 create table roles (
     id serial not null primary key,
@@ -20,7 +25,7 @@ alter table users add constraint unique_username unique (username);
 create table guides (
   	id serial not null primary key,
     first_name varchar(255) not null,
-    last_name varchar(255) not null,
+    last_name varchar(255) not null
 );
 
 create table tours (
@@ -34,9 +39,13 @@ create table tours (
 create table bookings (
     id serial not null primary key,
     tour_id integer,
-    user_id integer,
     guide_id integer,
     foreign key (tour_id) references tours(id) on delete cascade,
-    foreign key (user_id) references users(id) on delete cascade,
     foreign key (guide_id) references guides(id) on delete cascade
+);
+
+create table booking_user (
+    booking_id integer not null references bookings(id) on delete cascade,
+    user_id integer not null references users(id) on delete cascade,
+    primary key (booking_id, user_id)
 );

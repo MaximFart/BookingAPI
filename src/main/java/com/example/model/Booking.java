@@ -3,6 +3,8 @@ package com.example.model;
 import com.example.dto.BookingDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -17,9 +19,12 @@ public class Booking {
     @JoinColumn(name = "tour_id", nullable = false)
     private Tour tour;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToMany
+    @JoinTable(
+            name = "booking_user",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    List<User> users = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "guide_id", nullable = false)
@@ -31,8 +36,8 @@ public class Booking {
     public BookingDto convertToDto() {
         BookingDto bookingDto = new BookingDto();
         bookingDto.setId(id);
+        bookingDto.setUserDto(users.size());
         bookingDto.setTourDto(tour.convertToDto());
-        bookingDto.setUserDto(user.convertToDto());
         bookingDto.setGuideDto(guide.convertToDto());
         return bookingDto;
     }
@@ -53,12 +58,12 @@ public class Booking {
         this.tour = tour;
     }
 
-    public User getUser() {
-        return user;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public Guide getGuide() {

@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.model.Booking;
+import com.example.model.User;
+import com.example.model.exception.EntityNotFoundException;
 import com.example.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +39,13 @@ public class BookingService {
     @Transactional
     public List<Booking> findAll() {
         return bookingRepository.findAll();
+    }
+
+    @Transactional
+    public Booking addUser(User user, Long id) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        booking.getUsers().add(user);
+        return bookingRepository.save(booking);
+
     }
 }

@@ -4,7 +4,7 @@ public class BookingDto {
 
     private Long id;
     private TourDto tourDto;
-    private UserDto userDto;
+    private Integer userDto;
     private GuideDto guideDto;
 
     public BookingDto() {
@@ -26,11 +26,11 @@ public class BookingDto {
         this.tourDto = tourDto;
     }
 
-    public UserDto getUserDto() {
+    public Integer getUserDto() {
         return userDto;
     }
 
-    public void setUserDto(UserDto userDto) {
+    public void setUserDto(Integer userDto) {
         this.userDto = userDto;
     }
 
