@@ -8,14 +8,15 @@ import com.example.service.RoleService;
 import com.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.security.SecurityConstants.USER;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/regist")
 public class RegistrationController {
 
@@ -27,8 +28,13 @@ public class RegistrationController {
         this.roleService = roleService;
     }
 
+    @GetMapping
+    public String getRegistration(@ModelAttribute("dto") RegistrationRequestDto dto) {
+        return "registration";
+    }
+
     @PostMapping
-    public ResponseEntity<UserDto> registration(@RequestBody RegistrationRequestDto dto) {
+    public ResponseEntity<UserDto> registration(@ModelAttribute("dto") RegistrationRequestDto dto) {
         User user = new User(
                 dto.getFirstName(),
                 dto.getLastName(),

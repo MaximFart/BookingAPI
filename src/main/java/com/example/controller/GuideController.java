@@ -26,7 +26,7 @@ public class GuideController {
         this.guideService = guideService;
     }
 
-    @PreAuthorize(AUTH_ALL)
+//    @PreAuthorize(AUTH_ALL)
     @GetMapping
     public List<GuideDto> findAllRoles() {
         return guideService.findAll().stream().map(Guide::convertToDto).collect(Collectors.toList());

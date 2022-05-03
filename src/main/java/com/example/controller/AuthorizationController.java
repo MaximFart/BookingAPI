@@ -6,13 +6,13 @@ import com.example.model.exception.EntityNotFoundException;
 import com.example.security.jwt.JwtTokenProvider;
 import com.example.service.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+import javax.servlet.http.HttpServletResponse;
+
+@Controller
 @RequestMapping("/api/v1/auth")
 public class AuthorizationController {
 
@@ -24,11 +24,25 @@ public class AuthorizationController {
         this.tokenProvider = tokenProvider;
     }
 
+    @GetMapping
+    public String getAuthorization(@ModelAttribute("dto") AuthorizationRequestDto dto) {
+        return "login";
+    }
+
+    @GetMapping("/http-servlet-response")
+    public String usingHttpServletResponse(@RequestParam String token, HttpServletResponse response) {
+        response.addHeader("Authorization", token);
+        return "complete";
+    }
+
     @PostMapping
-    public ResponseEntity<String> authorization(@RequestBody AuthorizationRequestDto dto) {
+    public String authorization(@ModelAttribute("dto") AuthorizationRequestDto dto, Model model) {
         User user = userService.findByUsername(dto.getUsername()).orElseThrow(() -> new EntityNotFoundException("User is not found", HttpStatus.NO_CONTENT));
-        if (user.getPassword().equals(dto.getPassword()))
-            return new ResponseEntity<>(tokenProvider.createToken(dto.getUsername()), HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (user.getPassword().equals(dto.getPassword())) {
+            model.addAttribute("token", tokenProvider.createToken(dto.getUsername()));
+            return "token";
+        } else {
+            return null;
+        }
     }
 }

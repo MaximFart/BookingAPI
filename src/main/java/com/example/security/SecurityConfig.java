@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/api/v1/regist",
-                                   "/api/v1/auth"
+                                   "/api/v1/auth",
+                        "/api/v1/auth/http-servlet-response"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
