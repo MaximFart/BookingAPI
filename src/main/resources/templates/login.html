@@ -9,18 +9,19 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-<form th:method="POST" th:action="@{/api/v1/auth}" th:object="${dto}">
-    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
-        <label for="Username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="Username" th:field="*{username}">
-    </div>
-    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
-        <label for="Password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="Password" th:field="*{password}">
-    </div>
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <button type="submit" class="btn btn-primary ">Submit</button>
-    </div>
+<div class="container">
+    <form th:method="POST" th:action="@{/api/v1/auth}" th:object="${dto}">
+    <h2 class="form-signin-heading">Login</h2>
+    <p>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+    </p>
+    <p>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+    </p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</div>
 </form>
 </body>
 </html>
