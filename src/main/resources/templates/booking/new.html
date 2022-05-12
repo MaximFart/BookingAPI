@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New teacher</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="d-grid gap-2 col-6 mx-auto">
+    <h3>Create new Booking</h3>
+    <form th:method="POST" th:action="@{/api/v1/bookings}" th:object="${booking}">
+        <label for="tour"><b>Tour id:</b> </label>
+        <input class="form-control" type="text" th:field="*{tour.id}" id="tour" placeholder="Enter tour"/>
+        <br>
+        <label for="guide"><b>Guide id:</b> </label>
+        <input class="form-control" type="text" th:field="*{guide.id}" id="guide" placeholder="Enter guide"/>
+        <br>
+        <input class="btn btn-secondary d-grid gap-2 col-12 mx-auto" type="submit" value="Add new booking"/>
+    </form>
+</div>
+</body>
+</html>

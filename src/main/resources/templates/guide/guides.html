@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Table guides</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<table class="table table-bordered table-sm">
+    <thead class="table-active">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="guide: ${guides}">
+        <td>
+            <a class="text-secondary" th:href="@{/api/v1/guides/{id}(id=${guide.getId()})}" th:text="${guide.getId()}">id</a>
+        </td>
+        <td th:text="${guide.firstName}"/>
+        <td th:text="${guide.lastName}"/>
+        <td>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/guides/{id}/edit(id=${guide.getId()})}">Edit</a>
+            </div>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <form th:method="DELETE" th:action="@{/api/v1/guides/{id}(id=${guide.getId()})}">
+                    <input class="btn btn-danger  d-grid gap-2 col-12 mx-auto" type="submit" value="Delete"/>
+                </form>
+            </div>
+            <div sec:authorize="hasRole('ROLE_USER')">
+                <p>Not options</p>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a class="btn btn-info d-grid gap-2 col-2 mx-auto" th:href="@{/api/v1/guides/new}">Add new guide</a>
+</div>
+</body>
+</html>

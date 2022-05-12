@@ -2,21 +2,17 @@ package com.example.controller;
 
 import com.example.controller.exception.NoEntityException;
 import com.example.model.Tour;
-import com.example.dto.TourDto;
 import com.example.service.TourService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.security.SecurityConstants.AUTH_ADMIN;
 import static com.example.security.SecurityConstants.AUTH_ALL;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/tours")
 public class TourController {
 
@@ -29,39 +25,50 @@ public class TourController {
 
     @PreAuthorize(AUTH_ALL)
     @GetMapping
-    public List<TourDto> findAllTours() {
-        return tourService.findAll().stream().map(Tour::convertToDto).collect(Collectors.toList());
+    public String findAllTours(Model model) {
+        model.addAttribute("tours", tourService.findAll());
+        return "tour/tours";
     }
 
     @PreAuthorize(AUTH_ALL)
     @GetMapping("/{id}")
-    public TourDto getTour(@PathVariable("id") Long id) throws NoEntityException {
-        return tourService.getById(id).map(Tour::convertToDto).orElseThrow(NoEntityException::new);
+    public String getTour(@PathVariable("id") Long id, Model model) throws NoEntityException {
+        model.addAttribute("tour", tourService.getById(id).orElseThrow(NoEntityException::new));
+        return "tour/show";
+    }
+
+    @PreAuthorize(AUTH_ADMIN)
+    @GetMapping("/new")
+    public String create(@ModelAttribute("tour") Tour tour) {
+        return "tour/new";
     }
 
     @PreAuthorize(AUTH_ADMIN)
     @PostMapping
-    public TourDto newTour(@RequestBody Tour tour) {
-        return tourService.save(tour).convertToDto();
+    public String newTour(@ModelAttribute("tour") Tour tour) {
+        tourService.save(tour);
+        return "redirect:/api/v1/tours";
     }
 
     @PreAuthorize(AUTH_ADMIN)
+    @GetMapping("/{id}/edit")
+    public String editTour(@PathVariable("id") Long id, Model model) throws NoEntityException {
+        model.addAttribute("tour", tourService.getById(id).orElseThrow(NoEntityException::new));
+        return "tour/edit";
+    }
+
+
+    @PreAuthorize(AUTH_ADMIN)
     @PutMapping("/{id}")
-    public TourDto editTour(@PathVariable("id") Long id, @RequestBody Tour newTour) throws NotFoundException {
-        return tourService.getById(id)
-                .map(tour -> {
-                    tour.setPrice(newTour.getPrice());
-                    tour.setRoute(newTour.getRoute());
-                    tour.setStart(newTour.getStart());
-                    tour.setFinish(newTour.getFinish());
-                    return tourService.save(tour).convertToDto();
-                })
-                .orElseThrow(() -> new NotFoundException("This tour not exist"));
+    public String edit(@PathVariable("id") Long id, @ModelAttribute("tour") Tour tour) {
+        tourService.save(tour);
+        return "redirect:/api/v1/tours";
     }
 
     @PreAuthorize(AUTH_ADMIN)
     @DeleteMapping("/{id}")
-    public void deleteTour(@PathVariable("id") Long id) {
+    public String deleteTour(@PathVariable("id") Long id) {
         tourService.deleteById(id);
+        return "redirect:/api/v1/tours";
     }
 }

@@ -42,10 +42,17 @@ public class BookingService {
     }
 
     @Transactional
-    public Booking addUser(User user, Long id) {
+    public void addUser(User user, Long id) {
         Booking booking = bookingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         booking.getUsers().add(user);
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+    }
+
+    @Transactional
+    public void removeUser(User user, Long id) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        booking.getUsers().remove(user);
+        bookingRepository.save(booking);
 
     }
 }

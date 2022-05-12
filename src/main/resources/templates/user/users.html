@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Users</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<table class="table table-bordered table-sm">
+    <thead class="table-active">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Username</th>
+        <th scope="col">Password</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">LastName</th>
+        <th scope="col">Role</th>
+        <th scope="col">Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${users}">
+        <td>
+            <a class="text-secondary" th:href="@{/api/v1/users/{id}(id=${user.getId()})}" th:text="${user.getId()}">id</a>
+        </td>
+        <td th:text="${user.getUsername()}"/>
+        <td th:text="${user.getPassword()}"/>
+        <td th:text="${user.getFirstName()}"/>
+        <td th:text="${user.getLastName()}"/>
+        <td th:text="${user.getRole().getName()}"/>
+        <td>
+            <div th:if ="${user.username}==${#authentication.name}">
+                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/users/{id}/edit(id=${user.getId()})}">Edit</a>
+            </div>
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <form th:method="DELETE" th:action="@{/api/v1/users/{id}(id=${user.getId()})}">
+                    <input class="btn btn-danger  d-grid gap-2 col-12 mx-auto" type="submit" value="Delete"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div sec:authorize="hasAnyRole('ROLE_ADMIN')">
+    <a class="btn btn-info d-grid gap-2 col-2 mx-auto" th:href="@{/api/v1/users/new}">Add new user</a>
+</div>
+</body>
+</html>

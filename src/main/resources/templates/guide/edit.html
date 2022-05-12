@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show student</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="d-grid gap-2 col-6 mx-auto">
+    <h3>Edit guide</h3>
+    <form th:method="PUT" th:action="@{/api/v1/guides/{id}(id=${guide.getId()})}" th:object="${guide}">
+        <label for="firstName"><b>First name:</b> </label>
+        <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="Enter firstName"/>
+        <br>
+        <label for="lastName"><b>Last name:</b> </label>
+        <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="Enter lastName"/>
+        <br>
+        <input class="btn btn-secondary d-grid gap-2 col-12 mx-auto" type="submit" value="Update"/>
+    </form>
+</div>
+</body>
+</html>

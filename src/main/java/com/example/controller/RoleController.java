@@ -3,10 +3,13 @@ package com.example.controller;
 import com.example.controller.exception.NoEntityException;
 import com.example.model.Role;
 import com.example.dto.RoleDto;
+import com.example.model.Tour;
 import com.example.service.RoleService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.stream.Collectors;
 import static com.example.security.SecurityConstants.AUTH_ADMIN;
 import static com.example.security.SecurityConstants.AUTH_ALL;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/roles")
 public class RoleController {
 
@@ -28,36 +31,50 @@ public class RoleController {
 
     @PreAuthorize(AUTH_ALL)
     @GetMapping
-    public List<RoleDto> findAllRoles() {
-        return roleService.findAll().stream().map(Role::convertToDto).collect(Collectors.toList());
+    public String findAllRoles(Model model) {
+        model.addAttribute("roles", roleService.findAll());
+        return "role/roles";
     }
 
     @PreAuthorize(AUTH_ALL)
     @GetMapping("/{id}")
-    public RoleDto getRole(@PathVariable("id") Long id) throws NotFoundException {
-        return roleService.getById(id).map(Role::convertToDto).orElseThrow(() -> new NotFoundException("This role not exist"));
+    public String getRole(@PathVariable("id") Long id, Model model) throws NoEntityException {
+        model.addAttribute("role", roleService.getById(id).orElseThrow(NoEntityException::new));
+        return "role/show";
+    }
+
+    @PreAuthorize(AUTH_ADMIN)
+    @GetMapping("/new")
+    public String create(@ModelAttribute("role") Role role) {
+        return "role/new";
     }
 
     @PreAuthorize(AUTH_ADMIN)
     @PostMapping
-    public RoleDto newRole(@RequestBody Role newRole) {
-        return roleService.save(newRole).convertToDto();
+    public String newRole(@ModelAttribute("role") Role role) {
+        roleService.save(role);
+        return "redirect:/api/v1/roles";
     }
 
     @PreAuthorize(AUTH_ADMIN)
+    @GetMapping("/{id}/edit")
+    public String editRole(@PathVariable("id") Long id, Model model) throws NoEntityException {
+        model.addAttribute("role", roleService.getById(id).orElseThrow(NoEntityException::new));
+        return "role/edit";
+    }
+
+
+    @PreAuthorize(AUTH_ADMIN)
     @PutMapping("/{id}")
-    public RoleDto editRole(@PathVariable("id") Long id, @RequestBody Role newRole) throws NoEntityException {
-        return roleService.getById(id)
-                .map(role -> {
-                    role.setName(newRole.getName());
-                    return roleService.save(role).convertToDto();
-                })
-                .orElseThrow(() -> new NoEntityException("This role not exist"));
+    public String edit(@PathVariable("id") Long id, @ModelAttribute("role") Role role) {
+        roleService.save(role);
+        return "redirect:/api/v1/roles";
     }
 
     @PreAuthorize(AUTH_ADMIN)
     @DeleteMapping("/{id}")
-    public void deleteRole(@PathVariable("id") Long id) {
+    public String deleteRole(@PathVariable("id") Long id) {
         roleService.deleteById(id);
+        return "redirect:/api/v1/roles";
     }
 }

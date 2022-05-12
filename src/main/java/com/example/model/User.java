@@ -23,7 +23,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Booking> bookings = new ArrayList<>();
 
     public User() {

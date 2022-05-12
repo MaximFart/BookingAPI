@@ -19,7 +19,7 @@ public class Booking {
     @JoinColumn(name = "tour_id", nullable = false)
     private Tour tour;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "booking_user",
             joinColumns = @JoinColumn(name = "booking_id"),

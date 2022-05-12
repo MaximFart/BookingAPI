@@ -6,8 +6,10 @@ import com.example.model.User;
 import com.example.model.exception.EntityNotFoundException;
 import com.example.service.RoleService;
 import com.example.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,27 +24,31 @@ public class RegistrationController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegistrationController(UserService userService, RoleService roleService) {
+    @Autowired
+    public RegistrationController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
     public String getRegistration(@ModelAttribute("dto") RegistrationRequestDto dto) {
-        return "registration";
+        return "authorization/registration";
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> registration(@ModelAttribute("dto") RegistrationRequestDto dto) {
+    public String registration(@ModelAttribute("dto") RegistrationRequestDto dto) {
         User user = new User(
                 dto.getFirstName(),
                 dto.getLastName(),
                 dto.getUsername(),
-                dto.getPassword(),
+                passwordEncoder.encode(dto.getPassword()),
                 roleService.findByName(USER).orElseThrow(() -> new EntityNotFoundException("Role is not found", HttpStatus.NO_CONTENT))
         );
-        return new ResponseEntity<>(userService.save(user).convertToDto(), HttpStatus.OK);
+        userService.save(user);
+        return "redirect:/api/v1/auth";
     }
 }
  

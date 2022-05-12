@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Table guides</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<table class="table table-bordered table-sm">
+    <thead class="table-active">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Tour</th>
+        <th scope="col">Guide</th>
+        <th scope="col">Count users</th>
+        <th scope="col">Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking: ${bookings}">
+        <td>
+            <a class="text-secondary" th:href="@{/api/v1/bookings/{id}(id=${booking.getId()})}" th:text="${booking.getId()}">id</a>
+        </td>
+        <td th:text="${booking.tour.route}"/>
+        <td th:text="${booking.guide.lastName}"/>
+        <td th:text="${booking.users.size()}"/>
+
+        <td>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/bookings/{id}/edit(id=${booking.getId()})}">Edit</a>
+            </div>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <form th:method="DELETE" th:action="@{/api/v1/bookings/{id}(id=${booking.getId()})}">
+                    <input class="btn btn-danger  d-grid gap-2 col-12 mx-auto" type="submit" value="Delete"/>
+                </form>
+            </div>
+            <div sec:authorize="hasRole('ROLE_USER')">
+                <div th:each="user: ${booking.users}">
+                    <div th:if="${user.getUsername()} != ${#authentication.name}">
+                        <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_user(username=${#authentication.name},id=${booking.id})}">
+                            <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add user"/>
+                        </form>
+                    </div>
+                    <div th:if="${user.getUsername()} == ${#authentication.name}">
+                        <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/remove_user(username=${#authentication.name},id=${booking.id})}">
+                            <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Remove user"/>
+                        </form>
+                    </div>
+                </div>
+                <div th:if="${booking.users.size()} == 0">
+                    <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_user(username=${#authentication.name},id=${booking.id})}">
+                        <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add user"/>
+                    </form>
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a class="btn btn-info d-grid gap-2 col-2 mx-auto" th:href="@{/api/v1/bookings/new}">Add new booking</a>
+</div>
+</body>
+</html>
