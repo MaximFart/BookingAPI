@@ -9,6 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <div class="d-grid gap-2 col-6 mx-auto">
     <h3>Edit guide</h3>
     <form th:method="PUT" th:action="@{/api/v1/bookings/{id}(id=${booking.getId()})}" th:object="${booking}">

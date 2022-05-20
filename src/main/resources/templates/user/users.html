@@ -9,6 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <table class="table table-bordered table-sm">
     <thead class="table-active">
     <tr>
@@ -35,7 +36,6 @@
             <div th:if ="${user.username}==${#authentication.name}">
                 <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/users/{id}/edit(id=${user.getId()})}">Edit</a>
             </div>
-
             <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <form th:method="DELETE" th:action="@{/api/v1/users/{id}(id=${user.getId()})}">
                     <input class="btn btn-danger  d-grid gap-2 col-12 mx-auto" type="submit" value="Delete"/>

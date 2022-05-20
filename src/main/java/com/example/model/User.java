@@ -13,6 +13,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "username", unique = true)
     private String username;
     private String password;
@@ -23,7 +24,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
     private List<Booking> bookings = new ArrayList<>();
 
     public User() {
@@ -102,5 +103,12 @@ public class User {
 
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                '}';
     }
 }

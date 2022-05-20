@@ -4,6 +4,7 @@ import com.example.controller.exception.NoEntityException;
 import com.example.model.Booking;
 import com.example.model.User;
 import com.example.service.BookingService;
+import com.example.service.GuideService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,11 +20,13 @@ public class BookingController {
 
     private BookingService bookingService;
     private UserService userService;
+    private GuideService guideService;
 
     @Autowired
-    public BookingController(BookingService bookingService, UserService userService) {
+    public BookingController(BookingService bookingService, UserService userService, GuideService guideService) {
         this.bookingService = bookingService;
         this.userService = userService;
+        this.guideService = guideService;
     }
 
     @PreAuthorize(AUTH_ALL)
@@ -44,6 +47,24 @@ public class BookingController {
     @GetMapping("/new")
     public String create(@ModelAttribute("booking") Booking booking) {
         return "booking/new";
+    }
+
+    @PreAuthorize(AUTH_GUIDE)
+    @PostMapping("/{username}/{id}/add_guide")
+    public String addGuide(@PathVariable(value = "username") String username, @PathVariable(value = "id") Long id) throws NoEntityException {
+        Booking booking = bookingService.getById(id).orElseThrow(NoEntityException::new);
+        booking.setGuide(guideService.findByUsername(username).orElseThrow(NoEntityException::new));
+        bookingService.save(booking);
+        return "redirect:/api/v1/bookings";
+    }
+
+    @PreAuthorize(AUTH_GUIDE)
+    @PostMapping("/{username}/{id}/remove_guide")
+    public String removeGuide(@PathVariable(value = "username") String username, @PathVariable(value = "id") Long id) throws NoEntityException {
+        Booking booking = bookingService.getById(id).orElseThrow(NoEntityException::new);
+        booking.setGuide(null);
+        bookingService.save(booking);
+        return "redirect:/api/v1/bookings";
     }
 
     @PreAuthorize(AUTH_ADMIN)

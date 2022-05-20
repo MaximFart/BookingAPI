@@ -39,7 +39,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String registration(@ModelAttribute("dto") RegistrationRequestDto dto) {
+    public String registration(@ModelAttribute("dto") RegistrationRequestDto dto) throws Exception {
         User user = new User(
                 dto.getFirstName(),
                 dto.getLastName(),
@@ -47,7 +47,11 @@ public class RegistrationController {
                 passwordEncoder.encode(dto.getPassword()),
                 roleService.findByName(USER).orElseThrow(() -> new EntityNotFoundException("Role is not found", HttpStatus.NO_CONTENT))
         );
-        userService.save(user);
+        if (!userService.findByUsername(user.getUsername()).isPresent()) {
+            userService.save(user);
+        } else {
+            throw new Exception("User just exist");
+        }
         return "redirect:/api/v1/auth";
     }
 }

@@ -5,18 +5,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class JwtUser implements UserDetails {
+public class SecurityGuide implements UserDetails {
 
     private Long id;
-    private String userName;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
     private Collection<? extends GrantedAuthority> roles;
 
-    public JwtUser(Long id, String userName, String password, String firstName, String lastName, Collection<? extends GrantedAuthority> roles) {
+    public SecurityGuide(Long id, String username, String password, String firstName, String lastName, Collection<? extends GrantedAuthority> roles) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,7 +35,7 @@ public class JwtUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -66,12 +66,8 @@ public class JwtUser implements UserDetails {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {

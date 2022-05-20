@@ -67,11 +67,16 @@ public class UserController {
 
     @PreAuthorize(AUTH_ALL)
     @PutMapping("/{id}")
-    public String edit(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        userService.save(user);
-        return "redirect:/api/v1/users";
+    public String edit(@PathVariable("id") Long id, @ModelAttribute("user") User newUser) throws NoEntityException {
+        User user = userService.getById(id).orElseThrow(NoEntityException::new);
+        if (user.getUsername().equals(newUser.getUsername())) {
+            userService.save(newUser);
+            return "redirect:/api/v1/users";
+        }
+        else {
+            userService.save(newUser);
+            return "redirect:/api/v1/auth";
+        }
     }
 
     @PreAuthorize(AUTH_ADMIN)

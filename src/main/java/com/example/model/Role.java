@@ -18,6 +18,9 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private List<User> users = new ArrayList<>();
 
+    @OneToMany(mappedBy = "role")
+    private  List<Guide> guides = new ArrayList<>();
+
     public Role() {
     }
 

@@ -23,10 +23,16 @@ create table users (
 alter table users add constraint unique_username unique (username);
 
 create table guides (
-  	id serial not null primary key,
+  	id serial primary key,
+  	username varchar(255) not null,
+    password varchar(255) not null,
     first_name varchar(255) not null,
-    last_name varchar(255) not null
+    last_name varchar(255) not null,
+    role_id integer not null,
+    foreign key (role_id) references roles(id) on delete cascade
 );
+
+alter table guides add constraint unique username unique (username);
 
 create table tours (
     id serial not null primary key,

@@ -8,21 +8,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtUserDetailsService jwtUserDetailsService;
+    private final SecurityUserDetailsService jwtUserDetailsService;
 
     @Autowired
-    public SecurityConfig(JwtUserDetailsService jwtUserDetailsService) {
+    public SecurityConfig(SecurityUserDetailsService jwtUserDetailsService) {
         this.jwtUserDetailsService = jwtUserDetailsService;
     }
 
@@ -38,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/api/v1/auth").permitAll()
-                .defaultSuccessUrl("/api/v1/auth/success")
+                .defaultSuccessUrl("/api/v1/bookings")
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/auth/logout", "POST"))
@@ -46,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/api/v1/auth");
-
     }
 
     @Override

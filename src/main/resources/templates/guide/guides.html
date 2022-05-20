@@ -9,12 +9,16 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <table class="table table-bordered table-sm">
     <thead class="table-active">
     <tr>
         <th scope="col">Id</th>
-        <th scope="col">First name</th>
-        <th scope="col">Last name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Password</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">LastName</th>
+        <th scope="col">Role</th>
         <th scope="col">Options</th>
     </tr>
     </thead>
@@ -23,10 +27,13 @@
         <td>
             <a class="text-secondary" th:href="@{/api/v1/guides/{id}(id=${guide.getId()})}" th:text="${guide.getId()}">id</a>
         </td>
-        <td th:text="${guide.firstName}"/>
-        <td th:text="${guide.lastName}"/>
+        <td th:text="${guide.getUsername()}"/>
+        <td th:text="${guide.getPassword()}"/>
+        <td th:text="${guide.getFirstName()}"/>
+        <td th:text="${guide.getLastName()}"/>
+        <td th:text="${guide.getRole().getName()}"/>
         <td>
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div th:if ="${guide.username}==${#authentication.name}">
                 <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/guides/{id}/edit(id=${guide.getId()})}">Edit</a>
             </div>
             <div sec:authorize="hasRole('ROLE_ADMIN')">

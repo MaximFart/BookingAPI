@@ -3,8 +3,7 @@ package com.example.model;
 import com.example.dto.BookingDto;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -19,28 +18,28 @@ public class Booking {
     @JoinColumn(name = "tour_id", nullable = false)
     private Tour tour;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "booking_user",
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    List<User> users = new ArrayList<>();
+    Set<User> users = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "guide_id", nullable = false)
+    @JoinColumn(name = "guide_id", nullable = true)
     private Guide guide;
 
     public Booking() {
     }
 
-    public BookingDto convertToDto() {
-        BookingDto bookingDto = new BookingDto();
-        bookingDto.setId(id);
-        bookingDto.setUserDto(users.size());
-        bookingDto.setTourDto(tour.convertToDto());
-        bookingDto.setGuideDto(guide.convertToDto());
-        return bookingDto;
-    }
+//    public BookingDto convertToDto() {
+//        BookingDto bookingDto = new BookingDto();
+//        bookingDto.setId(id);
+//        bookingDto.setUserDto(users.size());
+//        bookingDto.setTourDto(tour.convertToDto());
+//        bookingDto.setGuideDto(guide.convertToDto());
+//        return bookingDto;
+//    }
 
     public Long getId() {
         return id;
@@ -58,11 +57,11 @@ public class Booking {
         this.tour = tour;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

@@ -9,6 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <table class="table table-bordered table-sm">
     <thead class="table-active">
     <tr>
@@ -25,10 +26,22 @@
             <a class="text-secondary" th:href="@{/api/v1/bookings/{id}(id=${booking.getId()})}" th:text="${booking.getId()}">id</a>
         </td>
         <td th:text="${booking.tour.route}"/>
-        <td th:text="${booking.guide.lastName}"/>
-        <td th:text="${booking.users.size()}"/>
-
+        <td th:text="${booking.guide}"/>
+<!--        <td th:if="${booking.guide} != null">-->
+<!--           <div  th:text="${booking.guide.firstName}"></div> -->
+<!--        </td>-->
+        <td th:text="${booking.users}"/>
         <td>
+            <div sec:authorize="hasRole('ROLE_GUIDE')">
+                <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_guide(username=${#authentication.name},id=${booking.id})}">
+                    <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add guide"/>
+                </form>
+            </div>
+            <div sec:authorize="hasRole('ROLE_GUIDE')">
+                <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/remove_guide(username=${#authentication.name},id=${booking.id})}">
+                    <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="remove guide"/>
+                </form>
+            </div>
             <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/bookings/{id}/edit(id=${booking.getId()})}">Edit</a>
             </div>
@@ -38,25 +51,41 @@
                 </form>
             </div>
             <div sec:authorize="hasRole('ROLE_USER')">
-                <div th:each="user: ${booking.users}">
-                    <div th:if="${user.getUsername()} != ${#authentication.name}">
-                        <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_user(username=${#authentication.name},id=${booking.id})}">
-                            <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add user"/>
-                        </form>
-                    </div>
-                    <div th:if="${user.getUsername()} == ${#authentication.name}">
-                        <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/remove_user(username=${#authentication.name},id=${booking.id})}">
-                            <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Remove user"/>
-                        </form>
-                    </div>
-                </div>
-                <div th:if="${booking.users.size()} == 0">
+                <div>
                     <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_user(username=${#authentication.name},id=${booking.id})}">
                         <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add user"/>
                     </form>
                 </div>
+                <div>
+                    <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/remove_user(username=${#authentication.name},id=${booking.id})}">
+                        <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Remove user"/>
+                    </form>
+                </div>
             </div>
         </td>
+<!--        <td>-->
+<!--            <div sec:authorize="hasRole('ROLE_USER')">-->
+<!--                <div th:if="${booking.users.size()} == 0">-->
+<!--                    <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_user(username=${#authentication.name},id=${booking.id})}">-->
+<!--                        <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add user"/>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--                <div th:each="user: ${booking.users}">-->
+<!--                    <div th:if="${user.username == #authentication.name}">-->
+<!--                        <div th:if="${booking.users.contains(user)}">-->
+<!--                            <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/remove_user(username=${#authentication.name},id=${booking.id})}">-->
+<!--                                <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Remove user"/>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div th:unless="${user.username == #authentication.name}">-->
+<!--                        <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_user(username=${#authentication.name},id=${booking.id})}">-->
+<!--                            <input class="btn btn-info  d-grid gap-2 col-12 mx-auto" type="submit" value="Add user"/>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </td>-->
     </tr>
     </tbody>
 </table>

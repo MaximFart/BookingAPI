@@ -1,8 +1,13 @@
 package com.example.service;
 
 import com.example.model.Guide;
+import com.example.model.User;
+import com.example.model.exception.EntityNotFoundException;
 import com.example.repository.GuideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,7 +40,17 @@ public class GuideService {
     }
 
     @Transactional
+    public Optional<Guide> findByUsername(String username) {
+        return guideRepository.findByUsername(username);
+    }
+
+    @Transactional
     public List<Guide> findAll() {
         return guideRepository.findAll();
     }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        return guideRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with login " + username + " not found")).toSecurityGuide();
+//    }
 }

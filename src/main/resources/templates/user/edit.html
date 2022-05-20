@@ -9,9 +9,10 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <div class="d-grid gap-2 col-6 mx-auto">
     <h3>Edit user</h3>
-    <form th:method="PUT" th:action="@{/api/v1/tours/{id}(id=${user.getId()})}" th:object="${user}">
+    <form th:method="PUT" th:action="@{/api/v1/users/{id}(id=${user.getId()})}" th:object="${user}">
         <label for="username"><b>Username:</b> </label>
         <input class="form-control" type="text" th:field="*{username}" id="username" placeholder="Enter username"/>
         <br>
@@ -23,6 +24,8 @@
         <br>
         <label for="lastName"><b>Last name:</b> </label>
         <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="Enter lastName"/>
+        <br>
+        <input class="form-control" type="hidden" th:field="*{role}"/>
         <br>
         <input class="btn btn-secondary d-grid gap-2 col-12 mx-auto" type="submit" value="Update"/>
     </form>

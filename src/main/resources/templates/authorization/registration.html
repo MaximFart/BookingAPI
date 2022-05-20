@@ -9,25 +9,24 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <form th:method="POST" th:action="@{/api/v1/regist}" th:object="${dto}">
-    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <h2 class="form-sign in-heading">Registration</h2>
+
         <label for="Username" class="form-label">Username</label>
         <input type="text" class="form-control" id="Username" th:field="*{username}">
-    </div>
-    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+
         <label for="Password" class="form-label">Password</label>
         <input type="text" class="form-control" id="Password" th:field="*{password}">
-    </div>
-    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+
         <label for="firstName" class="form-label">FirstName</label>
         <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
-    </div>
-    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+
         <label for="lastName" class="form-label">lastName</label>
         <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
-    </div>
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <button type="submit" class="btn btn-primary ">Submit</button>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
     </div>
 </form>
 </body>

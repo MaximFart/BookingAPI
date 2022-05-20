@@ -9,18 +9,27 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
+<div th:replace="nav_bar/index.html :: navigation"></div>
 <div class="d-grid gap-2 col-6 mx-auto">
     <h1>Guide</h1>
     <hr>
     <b>Id:</b>
-    <p class="fw-normal" th:text="${guide.id}">VALUE</p>
+    <p class="fw-normal" th:text="${guide.getId()}">VALUE</p>
+    <hr>
+    <b>Username:</b>
+    <p class="fw-normal" th:text="${guide.getUsername()}">VALUE</p>
+    <hr>
+    <b>Password:</b>
+    <p class="fw-normal" th:text="${guide.getPassword()}">VALUE</p>
     <hr>
     <b>First name:</b>
-    <p class="fw-normal" th:text="${guide.firstName}">VALUE</p>
+    <p class="fw-normal" th:text="${guide.getFirstName()}">VALUE</p>
     <hr>
     <b>Last name:</b>
-    <p class="fw-normal" th:text="${guide.lastName}">VALUE</p>
+    <p class="fw-normal" th:text="${guide.getLastName()}">VALUE</p>
     <hr>
+    <b>Role:</b>
+    <p class="fw-normal" th:text="${guide.getRole().getName()}">VALUE</p>
 </div>
 </body>
 </html>
