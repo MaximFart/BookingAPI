@@ -16,7 +16,7 @@
         <th scope="col">Id</th>
         <th scope="col">Tour</th>
         <th scope="col">Guide</th>
-        <th scope="col">Count users</th>
+        <th scope="col">Users</th>
         <th scope="col">Options</th>
     </tr>
     </thead>
@@ -27,10 +27,11 @@
         </td>
         <td th:text="${booking.tour.route}"/>
         <td th:text="${booking.guide}"/>
-<!--        <td th:if="${booking.guide} != null">-->
-<!--           <div  th:text="${booking.guide.firstName}"></div> -->
-<!--        </td>-->
-        <td th:text="${booking.users}"/>
+        <td>
+            <div th:each="user: ${booking.users}">
+                <span th:text="${user.username}"></span>
+            </div>
+        </td>
         <td>
             <div sec:authorize="hasRole('ROLE_GUIDE')">
                 <form th:method="POST" th:action="@{/api/v1/bookings/{username}/{id}/add_guide(username=${#authentication.name},id=${booking.id})}">
