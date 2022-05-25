@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="ISO-8859-1">
     <title>Table courses</title>
@@ -16,38 +16,41 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/api/v1/bookings}">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Details</a>
-                <form class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" th:href="@{/api/v1/tours}">tours</a>
-                    <a class="dropdown-item" th:href="@{/api/v1/users}">users</a>
-                    <a class="dropdown-item" th:href="@{/api/v1/guides}">guide</a>
-                    <a class="dropdown-item" th:href="@{/api/v1/roles}">role</a>
-                    <a class="dropdown-item" th:href="@{/api/v1/bookings}">booking</a>
-                </form>
-            </li>
-            <li class="nav-item">
-                <form action="/api/v1/auth/logout" method="POST">
-                    <button class="btn btn-outline-secondary" type="submit">Sign out</button>
-                </form>
-            </li>
-            <li class="nav-item">
-                <p class="nav-link info" th:text="${#authentication.name}">name</p>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/api/v1/auth}">Sign in</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/api/v1/regist}">Sign up</a>
-            </li>
-        </ul>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/api/v1/bookings}">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Details</a>
+                    <form class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a class="dropdown-item" th:href="@{/api/v1/tours}">tours</a>
+                            <a class="dropdown-item" th:href="@{/api/v1/users}">users</a>
+                            <a class="dropdown-item" th:href="@{/api/v1/guides}">guide</a>
+                            <a class="dropdown-item" th:href="@{/api/v1/roles}">role</a>
+                        </div>
+                        <a class="dropdown-item" th:href="@{/api/v1/bookings}">booking</a>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form action="/api/v1/auth/logout" method="POST">
+                        <button class="btn btn-outline-secondary" type="submit">Sign out</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <p class="nav-link info" th:text="${#authentication.name}">value</p>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/v1/auth}">Sign in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/v1/regist}">Sign up</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 </body>
