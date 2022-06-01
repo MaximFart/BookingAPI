@@ -23,14 +23,14 @@ public class TourController {
         this.tourService = tourService;
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping
     public String findAllTours(Model model) {
         model.addAttribute("tours", tourService.findAll());
         return "tour/tours";
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping("/{id}")
     public String getTour(@PathVariable("id") Long id, Model model) throws NoEntityException {
         model.addAttribute("tour", tourService.getById(id).orElseThrow(NoEntityException::new));

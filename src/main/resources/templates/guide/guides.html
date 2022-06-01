@@ -33,16 +33,13 @@
         <td th:text="${guide.getLastName()}"/>
         <td th:text="${guide.getRole().getName()}"/>
         <td>
-            <div th:if ="${guide.username}==${#authentication.name}">
-                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/guides/{id}/edit(id=${guide.getId()})}">Edit</a>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/guides/{username}/edit(username=${guide.getUsername()})}">Edit</a>
             </div>
             <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <form th:method="DELETE" th:action="@{/api/v1/guides/{id}(id=${guide.getId()})}">
                     <input class="btn btn-danger  d-grid gap-2 col-12 mx-auto" type="submit" value="Delete"/>
                 </form>
-            </div>
-            <div sec:authorize="hasRole('ROLE_USER')">
-                <p>Not options</p>
             </div>
         </td>
     </tr>

@@ -25,6 +25,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
     }
 
     @Override
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userService.findByUsername(username);
         if (user.isPresent()) {

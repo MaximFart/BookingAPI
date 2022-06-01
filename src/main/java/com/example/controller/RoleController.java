@@ -29,14 +29,14 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping
     public String findAllRoles(Model model) {
         model.addAttribute("roles", roleService.findAll());
         return "role/roles";
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping("/{id}")
     public String getRole(@PathVariable("id") Long id, Model model) throws NoEntityException {
         model.addAttribute("role", roleService.getById(id).orElseThrow(NoEntityException::new));

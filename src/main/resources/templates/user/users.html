@@ -33,8 +33,8 @@
         <td th:text="${user.getLastName()}"/>
         <td th:text="${user.getRole().getName()}"/>
         <td>
-            <div th:if ="${user.username}==${#authentication.name}">
-                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/users/{id}/edit(id=${user.getId()})}">Edit</a>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="btn btn-info d-grid gap-2 col-12 mx-auto" th:href="@{/api/v1/users/{username}/edit(username=${user.getUsername()})}">Edit</a>
             </div>
             <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <form th:method="DELETE" th:action="@{/api/v1/users/{id}(id=${user.getId()})}">

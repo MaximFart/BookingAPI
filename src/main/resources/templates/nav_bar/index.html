@@ -39,7 +39,15 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <p class="nav-link info" th:text="${#authentication.name}">value</p>
+                    <div sec:authorize="hasRole('ROLE_USER')">
+                            <a class="nav-link info"  th:href="@{/api/v1/users/{username}/edit(username=${#authentication.name})}" th:text="${#authentication.name}">value</a>
+                    </div>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link info"  th:href="@{/api/v1/users/{username}/edit(username=${#authentication.name})}" th:text="${#authentication.name}">value</a>
+                    </div>
+                    <div sec:authorize="hasRole('ROLE_GUIDE')">
+                        <a class="nav-link info"  th:href="@{/api/v1/guides/{username}/edit(username=${#authentication.name})}" th:text="${#authentication.name}">value</a>
+                    </div>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">

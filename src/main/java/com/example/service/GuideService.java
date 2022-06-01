@@ -49,8 +49,4 @@ public class GuideService {
         return guideRepository.findAll();
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return guideRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with login " + username + " not found")).toSecurityGuide();
-//    }
 }

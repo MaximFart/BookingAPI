@@ -49,6 +49,14 @@ public class User {
         return userDto;
     }
 
+    public Long getIdByUsername(String username) throws Exception {
+        if (!this.username.equals(username)) {
+            throw new Exception();
+        }
+        return this.id;
+
+    }
+
     public Long getId() {
         return id;
     }

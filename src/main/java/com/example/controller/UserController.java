@@ -28,27 +28,27 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping
     public String findAllUsers(Model model) {
         model.addAttribute("users", userService.findAll());
         return "user/users";
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping("/{id}")
     public String getTour(@PathVariable("id") Long id, Model model) throws NoEntityException {
         model.addAttribute("user", userService.getById(id).orElseThrow(NoEntityException::new));
         return "user/show";
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping("/new")
     public String create(@ModelAttribute("user") User user) {
         return "user/new";
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @PostMapping
     public String newUser(@ModelAttribute("user") User user) throws NoEntityException {
         user.setRole(roleService.findByName(USER).orElseThrow(NoEntityException::new));
@@ -58,9 +58,9 @@ public class UserController {
     }
 
     @PreAuthorize(AUTH_ALL)
-    @GetMapping("/{id}/edit")
-    public String editTour(@PathVariable("id") Long id, Model model) throws NoEntityException {
-        model.addAttribute("user", userService.getById(id).orElseThrow(NoEntityException::new));
+    @GetMapping("/{username}/edit")
+    public String editTour(@PathVariable("username") String username, Model model) throws NoEntityException {
+        model.addAttribute("user", userService.findByUsername(username).orElseThrow(NoEntityException::new));
         return "user/edit";
     }
 
@@ -71,7 +71,7 @@ public class UserController {
         User user = userService.getById(id).orElseThrow(NoEntityException::new);
         if (user.getUsername().equals(newUser.getUsername())) {
             userService.save(newUser);
-            return "redirect:/api/v1/users";
+            return "redirect:/api/v1/users/" + newUser.getUsername() + "/edit";
         }
         else {
             userService.save(newUser);

@@ -25,14 +25,14 @@ public class GuideController {
         this.roleService = roleService;
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping
     public String findAllGuides(Model model) {
         model.addAttribute("guides", guideService.findAll());
         return "guide/guides";
     }
 
-    @PreAuthorize(AUTH_ALL)
+    @PreAuthorize(AUTH_ADMIN)
     @GetMapping("/{id}")
     public String getGuide(@PathVariable("id") Long id, Model model) throws NoEntityException {
         model.addAttribute("guide", guideService.getById(id).orElseThrow(NoEntityException::new));
@@ -53,20 +53,19 @@ public class GuideController {
         return "redirect:/api/v1/guides";
     }
 
-    @PreAuthorize(AUTH_GUIDE)
-    @GetMapping("/{id}/edit")
-    public String editGuide(@PathVariable("id") Long id, Model model) throws NoEntityException {
-        model.addAttribute("guide", guideService.getById(id).orElseThrow(NoEntityException::new));
+    @PreAuthorize(AUTH_ALL)
+    @GetMapping("/{username}/edit")
+    public String editGuide(@PathVariable("username") String username, Model model) throws NoEntityException {
+        model.addAttribute("guide", guideService.findByUsername(username).orElseThrow(NoEntityException::new));
         return "guide/edit";
     }
 
-
-    @PreAuthorize(AUTH_GUIDE)
+    @PreAuthorize(AUTH_ALL)
     @PutMapping("/{id}")
-    public String edit(@PathVariable("id") Long id, @ModelAttribute("guide") Guide guide) throws NoEntityException {
-        guide.setRole(roleService.findByName(GUIDE).orElseThrow(NoEntityException::new));
-        guideService.save(guide);
-        return "redirect:/api/v1/guides";
+    public String edit(@PathVariable("id") Long id, @ModelAttribute("newGuide") Guide newGuide) throws NoEntityException {
+        newGuide.setRole(roleService.findByName(GUIDE).orElseThrow(NoEntityException::new));
+        guideService.save(newGuide);
+        return "redirect:/api/v1/users/" + newGuide.getUsername() + "/edit";
     }
 
     @PreAuthorize(AUTH_ADMIN)
